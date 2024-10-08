@@ -1,10 +1,6 @@
 from collections import defaultdict
 from functools import reduce
-from typing import Any
-
-
-def todo_list(data: list[str]) -> list:
-    return ["ul", {"class": "one"}, [["li", d] for d in data]]
+from typing import Any, Mapping, Sequence
 
 
 def is_attribute(item: Any) -> bool:
@@ -37,38 +33,51 @@ def to_groups(acc: dict, item: Any) -> dict:
     return acc | {key: value}
 
 
-def transform(tag: list) -> dict:
-    first, *rest = tag
+def extract_from_tag(tag: str) -> tuple[str, dict]:
+    first, *rest = tag.split(".")
+    element_name, _id = first.split("#") if "#" in first else (first, "")
 
-    grouped: dict = reduce(to_groups, rest, defaultdict(list))
+    element_id = {"id": _id} if _id else {}
+    element_class = {"class": " ".join(rest)} if rest else {}
+
+    return element_name, element_id | element_class
+
+
+def transform(tags: Sequence) -> dict:
+    first, *rest = tags
+
+    element, extracted = extract_from_tag(first)
+    extra = [extracted] + rest
+
+    grouped: dict = reduce(to_groups, extra, defaultdict(list))
     key = "children"
 
     children = grouped[key]
 
-    branch = {first: [transform(r) for r in children]}
+    branch = {element: [transform(r) for r in children]}
     options = {k: v for k, v in grouped.items() if k != key and v}
 
     return branch | options
 
 
-def transform_attribute(acc: str, attributes: dict) -> str:
+def to_element_attributes(acc: str, attributes: Mapping) -> str:
     attrs = [f'{k}="{v}"' for k, v in attributes.items()]
-    joined = " ".join(attrs)
+    joined = " ".join([acc] + attrs)
 
-    return acc + joined
+    return joined
 
 
-def transform_html(tag: dict) -> list:
+def transform_html(tag: Mapping) -> list:
     node = next(iter(tag.keys()))
     child = next(iter(tag.values()))
 
-    attributes = reduce(transform_attribute, tag.get("attributes", []), "")
+    attributes = reduce(to_element_attributes, tag.get("attributes", []), "")
     content = tag.get("content", [])
 
     matrix = [transform_html(c) for c in child]
     flattened = sum(matrix, [])
 
-    begin = f"{node} {attributes}" if attributes else node
+    begin = f"{node}{attributes}" if attributes else node
 
     if flattened or content:
         return [f"<{begin}>"] + flattened + content + [f"</{node}>"]
@@ -76,7 +85,7 @@ def transform_html(tag: dict) -> list:
     return [f"<{begin} />"]
 
 
-def render(data: list):
+def render_html(data: Sequence):
     transformed = transform(data)
 
     transformed_html = transform_html(transformed)
@@ -84,10 +93,13 @@ def render(data: list):
     return "".join(transformed_html)
 
 
+def todo_list(data: list[str]) -> list:
+    return ["ul", {"class": "one"}, [["li", d] for d in data]]
+
+
 z = [
-    "div",
-    {"class": "first second"},
-    ["span", ["a", {"href": "hello", "target": "_blank"}]],
+    "div#hello.first.second",
+    ["span", ["a#hello-world.highlight", {"href": "hello", "target": "_blank"}]],
     ["span", ["span", ["strong", "HELLO"], ["strong", "WORLD"]]],
     [
         "figure",
@@ -98,4 +110,4 @@ z = [
     todo_list(["one", "two", "three"]),
 ]
 
-y = ("div", ("span", ("a", "hello")))
+y = ("div#hello", ("span", ("a", "hello")))
