@@ -10,6 +10,7 @@ dependencies = [
 
 [tool.uv]
 dev-dependencies = [
+    "pytest>=8.3.3",
     "ruff>=0.6.9",
 ]
 
@@ -18,3 +19,11 @@ lint.select = ["ALL"]
 lint.ignore = ["D", "COM812", "ISC001"]
 
 line-length = 100
+
+[tool.ruff.lint.per-file-ignores]
+"test/*.py" = ["S101"]
+
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

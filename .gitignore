@@ -1,5 +1,14 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Tools
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
 .venv
-__pycache__
-.mypy_cache
-dist
-.coverage
