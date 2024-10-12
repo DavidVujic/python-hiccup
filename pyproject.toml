@@ -1,5 +1,5 @@
 [project]
-name = "piccup"
+name = "python-hiccup"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
