@@ -120,7 +120,7 @@ x = [
     todo_list(["one", "two", "three"]),
 ]
 
-y = ("div#hello", ("span", ("a", "hello")))
+y = ("div#hello", ("span", ("a", "hello"), ("span", {"data-val-something": "this is some data"})))
 
 z = ["script", """
 
