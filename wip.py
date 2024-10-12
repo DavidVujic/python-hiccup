@@ -1,3 +1,4 @@
+import html
 from collections import defaultdict
 from functools import reduce
 from typing import Any, Mapping, Sequence
@@ -67,20 +68,28 @@ def to_element_attributes(acc: str, attributes: Mapping) -> str:
     return joined
 
 
+def is_script_tag(element: str) -> bool:
+    return str.lower(element) == "script"
+
+
+def escape(content: str, element: str) -> str:
+    return content if is_script_tag(element) else html.escape(content)
+
+
 def transform_html(tag: Mapping) -> list:
-    node = next(iter(tag.keys()))
+    element = next(iter(tag.keys()))
     child = next(iter(tag.values()))
 
     attributes = reduce(to_element_attributes, tag.get("attributes", []), "")
-    content = tag.get("content", [])
+    content = [escape(c, element) for c in tag.get("content", [])]
 
     matrix = [transform_html(c) for c in child]
     flattened = sum(matrix, [])
 
-    begin = f"{node}{attributes}" if attributes else node
+    begin = f"{element}{attributes}" if attributes else element
 
     if flattened or content:
-        return [f"<{begin}>"] + flattened + content + [f"</{node}>"]
+        return [f"<{begin}>"] + flattened + content + [f"</{element}>"]
 
     return [f"<{begin} />"]
 
@@ -97,8 +106,9 @@ def todo_list(data: list[str]) -> list:
     return ["ul", {"class": "one"}, [["li", d] for d in data]]
 
 
-z = [
+x = [
     "div#hello.first.second",
+    "Hello & world",
     ["span", ["a#hello-world.highlight", {"href": "hello", "target": "_blank"}]],
     ["span", ["span", ["strong", "HELLO"], ["strong", "WORLD"]]],
     [
@@ -111,3 +121,13 @@ z = [
 ]
 
 y = ("div#hello", ("span", ("a", "hello")))
+
+z = ["script", """
+
+const x = {one: 1};
+
+if(x.one > 2) {
+  console.log('hello world');
+}
+
+"""]
