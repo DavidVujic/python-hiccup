@@ -1,4 +1,3 @@
-import functools
 import html
 import operator
 from collections import defaultdict
@@ -85,7 +84,7 @@ def transform_html(tag: Mapping) -> list:
     content = [escape(c, element) for c in tag.get("content", [])]
 
     matrix = [transform_html(c) for c in child]
-    flattened: list = functools.reduce(operator.iadd, matrix, [])
+    flattened: list = reduce(operator.iadd, matrix, [])
 
     begin = f"{element}{attributes}" if attributes else element
 
