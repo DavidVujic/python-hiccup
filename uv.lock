@@ -105,21 +105,19 @@ wheels = [
 name = "python-hiccup"
 version = "0.1.0"
 source = { editable = "." }
-dependencies = [
-    { name = "mypy" },
-]
 
 [package.dev-dependencies]
 dev = [
+    { name = "mypy" },
     { name = "pytest" },
     { name = "ruff" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "mypy", specifier = ">=1.11.2" }]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "mypy", specifier = ">=1.11.2" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "ruff", specifier = ">=0.6.9" },
 ]
