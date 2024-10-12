@@ -1,3 +1,5 @@
+"""Transform a sequence of tag data into groups."""
+
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from functools import reduce
@@ -44,6 +46,7 @@ def _extract_from_tag(tag: str) -> tuple[str, dict]:
 
 
 def transform(tags: Sequence) -> dict:
+    """Transform a sequence of tag data into goups: elements, attributes and content."""
     first, *rest = tags
 
     element, extracted = _extract_from_tag(first)

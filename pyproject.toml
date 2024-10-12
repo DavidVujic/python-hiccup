@@ -15,12 +15,12 @@ dev-dependencies = [
 
 [tool.ruff]
 lint.select = ["ALL"]
-lint.ignore = ["D", "COM812", "ISC001"]
+lint.ignore = ["COM812", "ISC001", "D203", "D213"]
 
 line-length = 100
 
 [tool.ruff.lint.per-file-ignores]
-"test/*.py" = ["S101"]
+"test/*.py" = ["D", "S101"]
 
 
 [build-system]
