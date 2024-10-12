@@ -1,22 +1,24 @@
+import functools
 import html
+import operator
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from functools import reduce
-from typing import Any, Mapping, Sequence
 
 
-def is_attribute(item: Any) -> bool:
+def is_attribute(item: str | Mapping | Sequence) -> bool:
     return isinstance(item, dict)
 
 
-def is_child(item: Any) -> bool:
+def is_child(item: str | Mapping | Sequence) -> bool:
     return isinstance(item, list | tuple)
 
 
-def is_content(item: Any) -> bool:
+def is_content(item: str | Mapping | Sequence) -> bool:
     return not is_attribute(item) and not is_child(item)
 
 
-def key_for_group(item: Any) -> str:
+def key_for_group(item: str | Mapping | Sequence) -> str:
     if is_attribute(item):
         return "attributes"
     if is_content(item):
@@ -25,7 +27,7 @@ def key_for_group(item: Any) -> str:
     return "children"
 
 
-def to_groups(acc: dict, item: Any) -> dict:
+def to_groups(acc: dict, item: str | Mapping | Sequence) -> dict:
     key = key_for_group(item)
 
     flattened = item[0] if is_child(item) and is_child(item[0]) else item
@@ -48,7 +50,7 @@ def transform(tags: Sequence) -> dict:
     first, *rest = tags
 
     element, extracted = extract_from_tag(first)
-    extra = [extracted] + rest
+    extra = [extracted, *rest]
 
     grouped: dict = reduce(to_groups, extra, defaultdict(list))
     key = "children"
@@ -63,9 +65,8 @@ def transform(tags: Sequence) -> dict:
 
 def to_element_attributes(acc: str, attributes: Mapping) -> str:
     attrs = [f'{k}="{v}"' for k, v in attributes.items()]
-    joined = " ".join([acc] + attrs)
 
-    return joined
+    return " ".join([acc, *attrs])
 
 
 def is_script_tag(element: str) -> bool:
@@ -84,17 +85,17 @@ def transform_html(tag: Mapping) -> list:
     content = [escape(c, element) for c in tag.get("content", [])]
 
     matrix = [transform_html(c) for c in child]
-    flattened = sum(matrix, [])
+    flattened: list = functools.reduce(operator.iadd, matrix, [])
 
     begin = f"{element}{attributes}" if attributes else element
 
     if flattened or content:
-        return [f"<{begin}>"] + flattened + content + [f"</{element}>"]
+        return [f"<{begin}>", *flattened, *content, f"</{element}>"]
 
     return [f"<{begin} />"]
 
 
-def render_html(data: Sequence):
+def render_html(data: Sequence) -> str:
     transformed = transform(data)
 
     transformed_html = transform_html(transformed)
@@ -120,9 +121,14 @@ x = [
     todo_list(["one", "two", "three"]),
 ]
 
-y = ("div#hello", ("span", ("a", "hello"), ("span", {"data-val-something": "this is some data"})))
+y = (
+    "div#hello",
+    ("span", ("a", "hello"), ("span", {"data-val-something": "this is some data"})),
+)
 
-z = ["script", """
+z = [
+    "script",
+    """
 
 const x = {one: 1};
 
@@ -130,4 +136,5 @@ if(x.one > 2) {
   console.log('hello world');
 }
 
-"""]
+""",
+]

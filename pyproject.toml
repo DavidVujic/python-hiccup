@@ -7,3 +7,14 @@ requires-python = ">=3.10"
 dependencies = [
     "mypy>=1.11.2",
 ]
+
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.6.9",
+]
+
+[tool.ruff]
+lint.select = ["ALL"]
+lint.ignore = ["D", "COM812", "ISC001"]
+
+line-length = 100
