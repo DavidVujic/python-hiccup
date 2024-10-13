@@ -6,6 +6,11 @@ from functools import reduce
 
 Item = str | set | Mapping | Sequence
 
+ATTRIBUTES = "attributes"
+BOOLEAN_ATTRIBUTES = "boolean_attributes"
+CHILDREN = "children"
+CONTENT = "content"
+
 
 def _is_attribute(item: Item) -> bool:
     return isinstance(item, dict)
@@ -31,13 +36,13 @@ def _is_sibling(item: str | Mapping | Sequence) -> bool:
 
 def _key_for_group(item: str | Mapping | Sequence) -> str:
     if _is_attribute(item):
-        return "attributes"
+        return ATTRIBUTES
     if _is_boolean_attribute(item):
-        return "boolean_attributes"
+        return BOOLEAN_ATTRIBUTES
     if _is_content(item):
-        return "content"
+        return CONTENT
 
-    return "children"
+    return CHILDREN
 
 
 def _to_groups(acc: dict, item: str | Mapping | Sequence) -> dict:
@@ -66,12 +71,10 @@ def _transform_tags(tags: Sequence) -> dict:
     extra = [extracted, *rest]
 
     grouped: dict = reduce(_to_groups, extra, defaultdict(list))
-    key = "children"
-
-    children = grouped[key]
+    children = grouped[CHILDREN]
 
     branch = {element: [_transform_tags(r) for r in children]}
-    options = {k: v for k, v in grouped.items() if k != key and v}
+    options = {k: v for k, v in grouped.items() if k != CHILDREN and v}
 
     return branch | options
 
