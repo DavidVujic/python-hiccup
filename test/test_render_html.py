@@ -99,3 +99,9 @@ def test_generates_an_element_with_children() -> None:
     data = ["ul", [["li", i] for i in items]]
 
     assert render(data) == "<ul><li>a</li><li>b</li><li>c</li></ul>"
+
+
+def test_allows_numeric_values_in_content() -> None:
+    data = ["ul", ["li", 1]]
+
+    assert render(data) == "<ul><li>1</li></ul>"

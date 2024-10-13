@@ -61,7 +61,7 @@ def _to_html(tag: Mapping) -> list:
     bool_attributes = reduce(_to_bool_attributes, tag.get("boolean_attributes", []), "")
     element_attributes = attributes + bool_attributes
 
-    content = [_escape(c, element) for c in tag.get("content", [])]
+    content = [_escape(str(c), element) for c in tag.get("content", [])]
 
     matrix = [_to_html(c) for c in child]
     flattened: list = reduce(operator.iadd, matrix, [])
