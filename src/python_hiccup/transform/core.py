@@ -30,11 +30,11 @@ def _is_content(item: Item) -> bool:
     return not any(fn(item) for fn in pipeline)
 
 
-def _is_sibling(item: str | Mapping | Sequence) -> bool:
+def _is_sibling(item: Item) -> bool:
     return _is_child(item)
 
 
-def _key_for_group(item: str | Mapping | Sequence) -> str:
+def _key_for_group(item: Item) -> str:
     if _is_attribute(item):
         return ATTRIBUTES
     if _is_boolean_attribute(item):
@@ -45,7 +45,7 @@ def _key_for_group(item: str | Mapping | Sequence) -> str:
     return CHILDREN
 
 
-def _to_groups(acc: dict, item: str | Mapping | Sequence) -> dict:
+def _to_groups(acc: dict, item: Item) -> dict:
     key = _key_for_group(item)
 
     flattened = item[0] if _is_child(item) and _is_child(item[0]) else item
