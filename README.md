@@ -1,18 +1,13 @@
 # Python Hiccup
 
 _Current status: experimental_
+This project started out as a fun challenge, now evolving into something that could be useful.
 
-A Python implementation of the Hiccup syntax.
-Python Hiccup is a library for representing HTML in Python.
-
-
-Use `list` or `tuple` to represent HTML elements, and `dict` to represent the attributes of an element.
-
+A Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
+Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
 
 ## Usage
-Starting out as a fun challenge, and evolving into something that could be useful.
-
-Creating server side HTML data using plain Python data structures, as an alternative to HTML server side templating (such as Jinja).
+Create server side HTML using plain Python data structures, as an alternative to templating (such as Jinja).
 This library should also be possible to combine with PyScript, but I haven't tested that out yet.
 
 ## Example
@@ -27,8 +22,7 @@ render(["div", "Hello world!"])
 The output will be a string: `<div>Hello world!</div>`
 
 
-Using Hiccup opens up to adding HTML in a programmatic way.
-
+With Hiccup, you can create HTML in a programmatic style.
 To render HTML like:
 ``` html
 <ul>
@@ -38,14 +32,14 @@ To render HTML like:
 </ul>
 ```
 
-Python Hiccup:
+with Python:
 ``` python
 def todo(data: list) -> list:
     return [["li", i] for i in data]
 
-data = ["one", "two", "three"]
+data = todo(["one", "two", "three"])
 
-render(["ul", todo(data)])
+render(["ul", data])
 ```
 
 ## Basic syntax
@@ -109,6 +103,6 @@ The HTML equivalent is:
 - [Hiccup](https://github.com/weavejester/hiccup) - the original implementation, for Clojure.
 
 
-## Python alternatives
+## Existing python alternatives
 - [pyhiccup](https://github.com/nbessi/pyhiccup)
 - [piccup](https://github.com/alexjuda/piccup)
