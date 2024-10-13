@@ -71,6 +71,18 @@ The HTML equivalent is:
 <div id="foo" class="bar">Hello world!</div>
 ```
 
+Adding valueless attributes to elements, such as the `async` or `defer`, by using Python `set`:
+``` python
+["!DOCTYPE", {"html"}]
+["script", {"async"}, {"src": "js/script.js"}]
+```
+
+The HTML equivalent is:
+``` html
+<!DOCTYPE html>
+<script async src="js/script.js"></script>
+```
+
 
 ## Resources
 - [Hiccup](https://github.com/weavejester/hiccup) - the original implementation, for Clojure.
