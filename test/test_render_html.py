@@ -5,43 +5,69 @@ def todo_list(data: list[str]) -> list:
     return ["ul", {"class": "one"}, [["li", d] for d in data]]
 
 
-def test_render_html_returns_a_string() -> None:
+def test_returns_a_string() -> None:
     data = ["div", "HELLO"]
 
     assert render_html(data) == "<div>HELLO</div>"
 
 
-x = [
-    "div#hello.first.second",
-    "Hello & world",
-    ["span", ["a#hello-world.highlight", {"href": "hello", "target": "_blank"}, "click here"]],
-    ["span", ["span", ["strong", "HELLO"], ["strong", "WORLD"]]],
-    [
-        "figure",
-        ["img", {"src": "picture.png"}],
-        ["figcaption", "A description of the picture"],
-    ],
-    ["br"],
-    todo_list(["one", "two", "three"]),
-]
+def test_accepts_a_sequence_of_tuples() -> None:
+    data = ("div", ("span", "HELLO"))
 
-y = (
-    "div#hello",
-    ("span", ("a", "hello"), ("span", {"data-val-something": "this is some data"})),
-)
+    assert render_html(data) == "<div><span>HELLO</span></div>"
 
-z = [
-    "script",
-    """
-const x = {one: 1};
 
-if(x.one > 2) {
-  console.log('hello world');
-}
-""",
-]
+def test_handles_special_tags() -> None:
+    assert render_html(["!DOCTYPE"]) == "<!DOCTYPE>"
+    assert render_html(["div"]) == "<div />"
 
-siblings = [
-    ["!DOCTYPE", {"html"}],
-    ["html", ["head", ["title", "the web page"]], ["body", ["div", "HELLO WORLD"]]],
-]
+
+def test_parses_attributes() -> None:
+    data = ["div", {"id": "hello", "class": "first second"}, "HELLO WORLD"]
+
+    expected = '<div id="hello" class="first second">HELLO WORLD</div>'
+
+    assert render_html(data) == expected
+
+
+def test_parses_attribute_shorthand() -> None:
+    data = ["div#hello.first.second", "HELLO WORLD"]
+
+    expected = '<div id="hello" class="first second">HELLO WORLD</div>'
+
+    assert render_html(data) == expected
+
+
+def test_parses_boolean_attributes() -> None:
+    data = ["script", {"async"}, {"src": "path/to/script"}]
+
+    expected = '<script src="path/to/script" async />'
+
+    assert render_html(data) == expected
+
+
+def test_accepts_sibling_elements() -> None:
+    siblings = [
+        ["!DOCTYPE", {"html"}],
+        ["html", ["head", ["title", "hey"]], ["body", "HELLO WORLD"]],
+    ]
+
+    expected = "<!DOCTYPE html><html><head><title>hey</title></head><body>HELLO WORLD</body></html>"
+
+    assert render_html(siblings) == expected
+
+
+def test_escapes_content() -> None:
+    data = ["div", "Hello & <Goodbye>"]
+
+    expected = "<div>Hello &amp; &lt;Goodbye&gt;</div>"
+
+    assert render_html(data) == expected
+
+
+def test_does_not_escape_script_content() -> None:
+    script_content = "if(x.one > 2) {console.log('hello world');}"
+    data = ["script", script_content]
+    expected = f"<script>{script_content}</script>"
+
+    assert render_html(data) == expected
