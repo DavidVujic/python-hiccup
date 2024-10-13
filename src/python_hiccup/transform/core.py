@@ -48,9 +48,9 @@ def _key_for_group(item: Item) -> str:
 def _to_groups(acc: dict, item: Item) -> dict:
     key = _key_for_group(item)
 
-    flattened = item[0] if isinstance(item, Sequence) and _is_child(item[0]) else item
+    flattened = [*item] if isinstance(item, Sequence) and _is_child(item[0]) else [item]
 
-    value = acc[key] + [flattened]
+    value = acc[key] + flattened
 
     return acc | {key: value}
 

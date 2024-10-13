@@ -1,10 +1,6 @@
 from python_hiccup.html import render
 
 
-def todo_list(data: list[str]) -> list:
-    return ["ul", {"class": "one"}, [["li", d] for d in data]]
-
-
 def test_returns_a_string() -> None:
     data = ["div", "HELLO"]
 
@@ -95,3 +91,11 @@ div span.something {
     expected = f"<style>{content}</style>"
 
     assert render(data) == expected
+
+
+def test_generates_an_element_with_children() -> None:
+    items = ["a", "b", "c"]
+
+    data = ["ul", [["li", i] for i in items]]
+
+    assert render(data) == "<ul><li>a</li><li>b</li><li>c</li></ul>"
