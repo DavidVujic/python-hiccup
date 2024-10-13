@@ -4,22 +4,36 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from functools import reduce
 
+Item = str | set | Mapping | Sequence
 
-def _is_attribute(item: str | Mapping | Sequence) -> bool:
+
+def _is_attribute(item: Item) -> bool:
     return isinstance(item, dict)
 
 
-def _is_child(item: str | Mapping | Sequence) -> bool:
+def _is_boolean_attribute(item: Item) -> bool:
+    return isinstance(item, set)
+
+
+def _is_child(item: Item) -> bool:
     return isinstance(item, list | tuple)
 
 
-def _is_content(item: str | Mapping | Sequence) -> bool:
-    return not _is_attribute(item) and not _is_child(item)
+def _is_content(item: Item) -> bool:
+    pipeline = [_is_attribute, _is_boolean_attribute, _is_child]
+
+    return not any(fn(item) for fn in pipeline)
+
+
+def _is_sibling(item: str | Mapping | Sequence) -> bool:
+    return _is_child(item)
 
 
 def _key_for_group(item: str | Mapping | Sequence) -> str:
     if _is_attribute(item):
         return "attributes"
+    if _is_boolean_attribute(item):
+        return "boolean_attributes"
     if _is_content(item):
         return "content"
 
@@ -45,8 +59,7 @@ def _extract_from_tag(tag: str) -> tuple[str, dict]:
     return element_name, element_id | element_class
 
 
-def transform(tags: Sequence) -> dict:
-    """Transform a sequence of tag data into goups: elements, attributes and content."""
+def _transform_tags(tags: Sequence) -> dict:
     first, *rest = tags
 
     element, extracted = _extract_from_tag(first)
@@ -57,7 +70,17 @@ def transform(tags: Sequence) -> dict:
 
     children = grouped[key]
 
-    branch = {element: [transform(r) for r in children]}
+    branch = {element: [_transform_tags(r) for r in children]}
     options = {k: v for k, v in grouped.items() if k != key and v}
 
     return branch | options
+
+
+def transform(tags: Sequence) -> list:
+    """Transform a sequence of tag data into goups: elements, attributes and content."""
+    first, *rest = tags
+
+    if _is_sibling(first):
+        return [_transform_tags(t) for t in tags]
+
+    return [_transform_tags(tags)]
