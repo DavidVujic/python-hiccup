@@ -1,8 +1,10 @@
 # Python Hiccup
 
-_Current status: experimental_
 This project started out as a fun challenge, now evolving into something that could be useful.
 
+Current status: _experimental_
+
+## What is it?
 A Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
 Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
 
