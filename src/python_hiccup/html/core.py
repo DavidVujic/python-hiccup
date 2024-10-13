@@ -65,7 +65,7 @@ def _to_html(tag: Mapping) -> list:
     return [f"<{begin}{extra}>"]
 
 
-def render_html(data: Sequence) -> str:
+def render(data: Sequence) -> str:
     """Transform a sequence of grouped data to HTML."""
     transformed = transform(data)
 

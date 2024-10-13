@@ -1,4 +1,4 @@
-from python_hiccup.render import render_html
+from python_hiccup.html import render
 
 
 def todo_list(data: list[str]) -> list:
@@ -8,18 +8,18 @@ def todo_list(data: list[str]) -> list:
 def test_returns_a_string() -> None:
     data = ["div", "HELLO"]
 
-    assert render_html(data) == "<div>HELLO</div>"
+    assert render(data) == "<div>HELLO</div>"
 
 
 def test_accepts_a_sequence_of_tuples() -> None:
     data = ("div", ("span", "HELLO"))
 
-    assert render_html(data) == "<div><span>HELLO</span></div>"
+    assert render(data) == "<div><span>HELLO</span></div>"
 
 
 def test_handles_special_tags() -> None:
-    assert render_html(["!DOCTYPE"]) == "<!DOCTYPE>"
-    assert render_html(["div"]) == "<div />"
+    assert render(["!DOCTYPE"]) == "<!DOCTYPE>"
+    assert render(["div"]) == "<div />"
 
 
 def test_parses_attributes() -> None:
@@ -27,7 +27,7 @@ def test_parses_attributes() -> None:
 
     expected = '<div id="hello" class="first second">HELLO WORLD</div>'
 
-    assert render_html(data) == expected
+    assert render(data) == expected
 
 
 def test_parses_attribute_shorthand() -> None:
@@ -35,7 +35,7 @@ def test_parses_attribute_shorthand() -> None:
 
     expected = '<div id="hello" class="first second">HELLO WORLD</div>'
 
-    assert render_html(data) == expected
+    assert render(data) == expected
 
 
 def test_parses_boolean_attributes() -> None:
@@ -43,7 +43,7 @@ def test_parses_boolean_attributes() -> None:
 
     expected = '<script src="path/to/script" async />'
 
-    assert render_html(data) == expected
+    assert render(data) == expected
 
 
 def test_accepts_sibling_elements() -> None:
@@ -54,7 +54,7 @@ def test_accepts_sibling_elements() -> None:
 
     expected = "<!DOCTYPE html><html><head><title>hey</title></head><body>HELLO WORLD</body></html>"
 
-    assert render_html(siblings) == expected
+    assert render(siblings) == expected
 
 
 def test_escapes_content() -> None:
@@ -62,7 +62,7 @@ def test_escapes_content() -> None:
 
     expected = "<div>Hello &amp; &lt;Goodbye&gt;</div>"
 
-    assert render_html(data) == expected
+    assert render(data) == expected
 
 
 def test_does_not_escape_script_content() -> None:
@@ -70,4 +70,4 @@ def test_does_not_escape_script_content() -> None:
     data = ["script", script_content]
     expected = f"<script>{script_content}</script>"
 
-    assert render_html(data) == expected
+    assert render(data) == expected
