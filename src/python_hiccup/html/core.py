@@ -11,19 +11,19 @@ from functools import reduce
 from python_hiccup.transform import transform
 
 
-def _is_script_tag(element: str) -> bool:
-    return str.lower(element) == "script"
+def _element_allows_raw_content(element: str) -> bool:
+    return str.lower(element) in {"script", "style"}
 
 
-def _is_comment(element: str) -> bool:
-    return str.startswith(element, "<!--") and str.endswith(element, "-->")
+def _is_allowed_raw(content: str) -> bool:
+    return str.startswith(content, "<!--") and str.endswith(content, "-->")
 
 
 def _allow_raw_content(content: str, element: str) -> bool:
-    if _is_script_tag(element):
+    if _element_allows_raw_content(element):
         return True
 
-    return _is_comment(content)
+    return _is_allowed_raw(content)
 
 
 def _escape(content: str, element: str) -> str:

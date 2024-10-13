@@ -78,3 +78,20 @@ def test_does_not_escape_comment_content() -> None:
     expected = "<div><!--Hello & <Goodbye>--></div>"
 
     assert render(data) == expected
+
+
+def test_does_not_escape_inline_style_tag_content() -> None:
+    content = """
+p {
+  color: red;
+}
+
+div span.something {
+  color: blue;
+}
+
+"""
+    data = ["style", content]
+    expected = f"<style>{content}</style>"
+
+    assert render(data) == expected
