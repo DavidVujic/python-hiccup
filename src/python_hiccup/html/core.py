@@ -15,8 +15,19 @@ def _is_script_tag(element: str) -> bool:
     return str.lower(element) == "script"
 
 
+def _is_comment(element: str) -> bool:
+    return str.startswith(element, "<!--") and str.endswith(element, "-->")
+
+
+def _allow_raw_content(content: str, element: str) -> bool:
+    if _is_script_tag(element):
+        return True
+
+    return _is_comment(content)
+
+
 def _escape(content: str, element: str) -> str:
-    return content if _is_script_tag(element) else html.escape(content)
+    return content if _allow_raw_content(content, element) else html.escape(content)
 
 
 def _join(acc: str, attrs: Sequence) -> str:

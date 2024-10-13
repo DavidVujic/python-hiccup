@@ -71,3 +71,10 @@ def test_does_not_escape_script_content() -> None:
     expected = f"<script>{script_content}</script>"
 
     assert render(data) == expected
+
+
+def test_does_not_escape_comment_content() -> None:
+    data = ["div", "<!--Hello & <Goodbye>-->"]
+    expected = "<div><!--Hello & <Goodbye>--></div>"
+
+    assert render(data) == expected
