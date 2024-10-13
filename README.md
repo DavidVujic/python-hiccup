@@ -27,7 +27,28 @@ render(["div", "Hello world!"])
 The output will be a string: `<div>Hello world!</div>`
 
 
-## Syntax
+Using Hiccup opens up to adding HTML in a programmatic way.
+
+To render HTML like:
+``` html
+<ul>
+    <li>one</li>
+    <li>two</li>
+    <li>three</li>
+</ul>
+```
+
+Python Hiccup:
+``` python
+def todo(data: list) -> list:
+    return [["li", i] for i in data]
+
+data = ["one", "two", "three"]
+
+render(["ul", todo(data)])
+```
+
+## Basic syntax
 
 Python:
 ``` python
