@@ -15,7 +15,7 @@ def test_render_html_returns_a_string() -> None:
 x = [
     "div#hello.first.second",
     "Hello & world",
-    ["span", ["a#hello-world.highlight", {"href": "hello", "target": "_blank"}]],
+    ["span", ["a#hello-world.highlight", {"href": "hello", "target": "_blank"}, "click here"]],
     ["span", ["span", ["strong", "HELLO"], ["strong", "WORLD"]]],
     [
         "figure",

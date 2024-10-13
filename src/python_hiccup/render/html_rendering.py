@@ -35,6 +35,13 @@ def _to_bool_attributes(acc: str, attributes: set) -> str:
     return _join(acc, attrs)
 
 
+def _suffix(element_data: str) -> str:
+    specials = {"doctype"}
+    normalized = str.lower(element_data)
+
+    return "" if any(s in normalized for s in specials) else " /"
+
+
 def _to_html(tag: Mapping) -> list:
     element = next(iter(tag.keys()))
     child = next(iter(tag.values()))
@@ -53,7 +60,9 @@ def _to_html(tag: Mapping) -> list:
     if flattened or content:
         return [f"<{begin}>", *flattened, *content, f"</{element}>"]
 
-    return [f"<{begin} />"]
+    extra = _suffix(begin)
+
+    return [f"<{begin}{extra}>"]
 
 
 def render_html(data: Sequence) -> str:
