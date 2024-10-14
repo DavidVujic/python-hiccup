@@ -1,7 +1,4 @@
-"""Render HTML from a sequence of grouped data.
-
-The data is expected to be grouped into elements, attributes and content
-"""
+"""Render HTML from a sequence of grouped data."""
 
 import html
 import operator
