@@ -1,6 +1,6 @@
 # Python Hiccup
 
-This project started out as a fun challenge, now evolving into something that could be useful.
+This project started out as a fun challenge, and now evolving into something that could be useful.
 
 Current status: _experimental_
 
@@ -10,12 +10,12 @@ Current status: _experimental_
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DavidVujic_python-hiccup&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DavidVujic_python-hiccup)
 
-## What is it?
-A Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
+## What is Python Hiccup?
+This is a Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
 Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
 
 ## Usage
-Create server side HTML using plain Python data structures, as an alternative to templating (such as Jinja).
+Create server side HTML using plain Python data structures.
 This library should also be possible to combine with PyScript, but I haven't tested that out yet.
 
 ## Example
