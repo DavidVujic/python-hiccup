@@ -82,7 +82,7 @@ def _transform_tags(tags: Sequence) -> dict:
 
 def transform(tags: Sequence) -> list:
     """Transform a sequence of tag data into goups: elements, attributes and content."""
-    first, *rest = tags
+    first, _ = tags
 
     if _is_sibling(first):
         return [_transform_tags(t) for t in tags]
