@@ -1,0 +1,25 @@
+version: 2.1
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  test:
+    docker:
+      - image: ghcr.io/astral-sh/uv:latest
+
+    steps:
+      - checkout
+      - run:
+          name: install 
+          command: uv sync
+      - run:
+          name: lint
+          command: uv run ruff check
+      - run:
+          name: test
+          command: uv run pytest
+
+workflows:
+  main:
+    jobs:
+      - test
