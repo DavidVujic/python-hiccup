@@ -4,6 +4,12 @@ This project started out as a fun challenge, now evolving into something that co
 
 Current status: _experimental_
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/DavidVujic/python-hiccup/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/DavidVujic/python-hiccup/tree/main)
+
+[![CodeScene Code Health](https://codescene.io/projects/59968/status-badges/code-health)](https://codescene.io/projects/59968)
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DavidVujic_python-hiccup&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DavidVujic_python-hiccup)
+
 ## What is it?
 A Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
 Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
