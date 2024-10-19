@@ -2,9 +2,10 @@
 
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
+from collections.abc import Set as AbstractSet
 from functools import reduce
 
-Item = str | set | Mapping | Sequence
+Item = str | AbstractSet | Mapping | Sequence
 
 ATTRIBUTES = "attributes"
 BOOLEAN_ATTRIBUTES = "boolean_attributes"
