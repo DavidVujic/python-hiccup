@@ -41,11 +41,20 @@ def test_parses_attribute_shorthand() -> None:
     assert render(data) == expected
 
 
+def test_explicit_closing_tag() -> None:
+    """Assert that some html elements are parsed with a closing tag."""
+    data = ["script"]
+
+    expected = "<script></script>"
+
+    assert render(data) == expected
+
+
 def test_parses_boolean_attributes() -> None:
     """Assert that attributes without values, such as async or defer, is parsed as expected."""
     data = ["script", {"async"}, {"src": "path/to/script"}]
 
-    expected = '<script src="path/to/script" async />'
+    expected = '<script src="path/to/script" async></script>'
 
     assert render(data) == expected
 

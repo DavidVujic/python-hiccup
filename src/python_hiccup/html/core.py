@@ -43,6 +43,12 @@ def _to_bool_attributes(acc: str, attributes: set) -> str:
     return _join(acc, attrs)
 
 
+def _closing_tag(element: str) -> bool:
+    specials = {"script"}
+
+    return str.lower(element) in specials
+
+
 def _suffix(element_data: str) -> str:
     specials = {"doctype"}
     normalized = str.lower(element_data)
@@ -67,6 +73,9 @@ def _to_html(tag: Mapping) -> list:
 
     if flattened or content:
         return [f"<{begin}>", *flattened, *content, f"</{element}>"]
+
+    if _closing_tag(element):
+        return [f"<{begin}>", f"</{element}>"]
 
     extra = _suffix(begin)
 
