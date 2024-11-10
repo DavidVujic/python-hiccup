@@ -71,8 +71,11 @@ def _to_html(tag: Mapping) -> list:
 
     begin = f"{element}{element_attributes}" if element_attributes else element
 
-    if flattened or content or _closing_tag(element):
+    if flattened or content:
         return [f"<{begin}>", *flattened, *content, f"</{element}>"]
+
+    if _closing_tag(element):
+        return [f"<{begin}>", f"</{element}>"]
 
     extra = _suffix(begin)
 
