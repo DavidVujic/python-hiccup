@@ -135,3 +135,10 @@ def test_allows_numeric_values_in_content() -> None:
     data = ["ul", ["li", 1]]
 
     assert render(data) == "<ul><li>1</li></ul>"
+
+
+def test_order_of_items() -> None:
+    """Assert that items of different types are ordered as expected."""
+    data = ["h1", "some ", ["span.pys", "<py>"]]
+
+    assert render(data) == '<h1>some <span class="pys">&lt;py&gt;</span></h1>'
