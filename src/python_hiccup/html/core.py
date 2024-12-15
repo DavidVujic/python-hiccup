@@ -5,7 +5,7 @@ import operator
 from collections.abc import Mapping, Sequence
 from functools import reduce
 
-from python_hiccup.transform import transform
+from python_hiccup.transform import CONTENT_TAG, transform
 
 
 def _element_allows_raw_content(element: str) -> bool:
@@ -56,23 +56,28 @@ def _suffix(element_data: str) -> str:
     return "" if any(s in normalized for s in specials) else " /"
 
 
-def _to_html(tag: Mapping) -> list:
+def _is_content(element: str) -> bool:
+    return element == CONTENT_TAG
+
+
+def _to_html(tag: Mapping, parent: str = "") -> list:
     element = next(iter(tag.keys()))
     child = next(iter(tag.values()))
+
+    if _is_content(element):
+        return [_escape(str(child), parent)]
 
     attributes = reduce(_to_attributes, tag.get("attributes", []), "")
     bool_attributes = reduce(_to_bool_attributes, tag.get("boolean_attributes", []), "")
     element_attributes = attributes + bool_attributes
 
-    content = [_escape(str(c), element) for c in tag.get("content", [])]
-
-    matrix = [_to_html(c) for c in child]
+    matrix = [_to_html(c, element) for c in child]
     flattened: list = reduce(operator.iadd, matrix, [])
 
     begin = f"{element}{element_attributes}" if element_attributes else element
 
-    if flattened or content:
-        return [f"<{begin}>", *flattened, *content, f"</{element}>"]
+    if flattened:
+        return [f"<{begin}>", *flattened, f"</{element}>"]
 
     if _closing_tag(element):
         return [f"<{begin}>", f"</{element}>"]

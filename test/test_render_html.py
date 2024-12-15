@@ -132,6 +132,13 @@ def test_generates_an_element_with_children() -> None:
 
 def test_allows_numeric_values_in_content() -> None:
     """Assert that numeric values are allowed as the content of an element."""
-    data = ["ul", ["li", 1]]
+    data = ["ul", ["li", 1], ["li", 2.2]]
 
-    assert render(data) == "<ul><li>1</li></ul>"
+    assert render(data) == "<ul><li>1</li><li>2.2</li></ul>"
+
+
+def test_order_of_items() -> None:
+    """Assert that items of different types are ordered as expected."""
+    data = ["h1", "some ", ["span.pys", "<py>"]]
+
+    assert render(data) == '<h1>some <span class="pys">&lt;py&gt;</span></h1>'
