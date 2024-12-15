@@ -1,6 +1,6 @@
 [project]
 name = "python-hiccup"
-version = "0.3.0"
+version = "0.3.1"
 description = "Python Hiccup is a library for representing HTML using plain Python data structures"
 readme = "README.md"
 requires-python = ">=3.10"
