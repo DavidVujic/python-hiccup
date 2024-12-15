@@ -6,13 +6,6 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
 
-[tool.uv]
-dev-dependencies = [
-    "mypy>=1.11.2",
-    "pytest>=8.3.3",
-    "ruff>=0.6.9",
-]
-
 [tool.ruff]
 lint.select = ["ALL"]
 lint.ignore = ["COM812", "ISC001", "D203", "D213"]
@@ -26,3 +19,10 @@ line-length = 100
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.13.0",
+    "pytest>=8.3.4",
+    "ruff>=0.8.3",
+]
