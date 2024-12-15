@@ -10,7 +10,8 @@ Item = str | AbstractSet | Mapping | Sequence
 ATTRIBUTES = "attributes"
 BOOLEAN_ATTRIBUTES = "boolean_attributes"
 CHILDREN = "children"
-CONTENT = "content"
+
+CONTENT_TAG = "<::HICCUP_CONTENT::>"
 
 
 def _is_attribute(item: Item) -> bool:
@@ -25,12 +26,6 @@ def _is_child(item: Item) -> bool:
     return isinstance(item, list | tuple)
 
 
-def _is_content(item: Item) -> bool:
-    pipeline = [_is_attribute, _is_boolean_attribute, _is_child]
-
-    return not any(fn(item) for fn in pipeline)
-
-
 def _is_sibling(item: Item) -> bool:
     return _is_child(item)
 
@@ -40,8 +35,6 @@ def _key_for_group(item: Item) -> str:
         return ATTRIBUTES
     if _is_boolean_attribute(item):
         return BOOLEAN_ATTRIBUTES
-    if _is_content(item):
-        return CONTENT
 
     return CHILDREN
 
@@ -67,6 +60,9 @@ def _extract_from_tag(tag: str) -> tuple[str, dict]:
 
 
 def _transform_tags(tags: Sequence) -> dict:
+    if not isinstance(tags, list | tuple):
+        return {CONTENT_TAG: tags}
+
     first, *rest = tags
 
     element, extracted = _extract_from_tag(first)
