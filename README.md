@@ -1,8 +1,6 @@
 # Python Hiccup
 
-This project started out as a fun challenge, and now evolving into something that could be useful.
-
-Current status: _experimental_
+Python Hiccup is a library for representing HTML using plain Python data structures.
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/DavidVujic/python-hiccup/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/DavidVujic/python-hiccup/tree/main)
 
@@ -13,6 +11,8 @@ Current status: _experimental_
 ## What is Python Hiccup?
 This is a Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
 Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
+
+_This project started out as a fun coding challenge, and now evolving into something useful for Python Dev teams._
 
 ## Usage
 Create server side HTML using plain Python data structures.
