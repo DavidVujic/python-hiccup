@@ -114,3 +114,18 @@ The HTML equivalent is:
 ## Existing python alternatives
 - [pyhiccup](https://github.com/nbessi/pyhiccup)
 - [piccup](https://github.com/alexjuda/piccup)
+
+
+## Development
+
+Running lint:
+
+``` shell
+uv run ruff check
+```
+
+Running tests:
+
+``` shell
+uv run pytest
+```
