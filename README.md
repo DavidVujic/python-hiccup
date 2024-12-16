@@ -106,19 +106,15 @@ The HTML equivalent is:
 <script async src="js/script.js"></script>
 ```
 
-
 ## Resources
 - [PyScript and python-hiccup example](https://pyscript.com/@davidvujic/pyscript-jokes-with-a-hiccup/latest?files=main.py) - PyScript Jokes with a Hiccup
 - [Hiccup](https://github.com/weavejester/hiccup) - the original implementation, for Clojure.
-
 
 ## Existing python alternatives
 - [pyhiccup](https://github.com/nbessi/pyhiccup)
 - [piccup](https://github.com/alexjuda/piccup)
 
-
 ## Development
-
 Running lint:
 
 ``` shell
