@@ -16,7 +16,7 @@ _This project started out as a fun coding challenge, and now evolving into somet
 
 ## Usage
 Create server side HTML using plain Python data structures.
-This library should also be possible to combine with PyScript, but I haven't tested that out yet.
+You can also use it with __PyScript__.
 
 ## Example
 
@@ -108,6 +108,7 @@ The HTML equivalent is:
 
 
 ## Resources
+- [PyScript and python-hiccup example](https://pyscript.com/@davidvujic/pyscript-jokes-with-a-hiccup/latest?files=main.py) - PyScript Jokes with a Hiccup
 - [Hiccup](https://github.com/weavejester/hiccup) - the original implementation, for Clojure.
 
 
