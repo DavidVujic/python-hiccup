@@ -1,10 +1,14 @@
 [project]
 name = "python-hiccup"
-version = "0.3.3"
+version = "0.3.4"
 description = "Python Hiccup is a library for representing HTML using plain Python data structures"
+authors = [{name = "David Vujic"}]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
+
+[project.urls]
+Repository = "https://github.com/DavidVujic/python-hiccup"
 
 [tool.ruff]
 lint.select = ["ALL"]
