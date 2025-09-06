@@ -76,22 +76,24 @@ def _to_html(tag: Mapping, parent: str = "", rename: str | None = None) -> list:
     html_setter = next(filter(_has_setter, tag.get("attributes", [])), None)
 
     if html_setter is not None:
-        return "".join(
-            _to_html(
-                {
-                    "script": [
-                        *reject(_has_content, tag[element]),
-                        {CONTENT_TAG: html_setter[HTML_SETTER].get("__html", "")},
-                    ],
-                    "attributes": [
-                        *reject(_has_setter, tag["attributes"]),
-                        dict(reject(_has_setter, html_setter.items())),
-                    ],
-                },
-                parent,
-                rename=element,
+        return [
+            "".join(
+                _to_html(
+                    {
+                        "script": [
+                            *reject(_has_content, tag[element]),
+                            {CONTENT_TAG: html_setter[HTML_SETTER].get("__html", "")},
+                        ],
+                        "attributes": [
+                            *reject(_has_setter, tag["attributes"]),
+                            dict(reject(_has_setter, html_setter.items())),
+                        ],
+                    },
+                    parent,
+                    rename=element,
+                )
             )
-        )
+        ]
 
     if _is_content(element):
         return [_escape(str(child), parent)]
