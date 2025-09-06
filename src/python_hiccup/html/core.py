@@ -4,8 +4,17 @@ import html
 import operator
 from collections.abc import Mapping, Sequence
 from functools import reduce
+from itertools import filterfalse as reject
 
-from python_hiccup.transform import CONTENT_TAG, transform
+from python_hiccup.transform import CONTENT_TAG, HTML_SETTER, transform
+
+
+def _has_setter(container: dict | list) -> bool:
+    return operator.contains(container, HTML_SETTER)
+
+
+def _has_content(container: dict | list) -> bool:
+    return operator.contains(container, CONTENT_TAG)
 
 
 def _element_allows_raw_content(element: str) -> bool:
@@ -32,7 +41,7 @@ def _join(acc: str, attrs: Sequence) -> str:
 
 
 def _to_attributes(acc: str, attributes: Mapping) -> str:
-    attrs = [f'{k}="{v}"' for k, v in attributes.items()]
+    attrs = [f'{k}="{v}"' for k, v in attributes.items() if k != HTML_SETTER]
 
     return _join(acc, attrs)
 
@@ -60,12 +69,34 @@ def _is_content(element: str) -> bool:
     return element == CONTENT_TAG
 
 
-def _to_html(tag: Mapping, parent: str = "") -> list:
+def _to_html(tag: Mapping, parent: str = "", rename: str | None = None) -> list:
     element = next(iter(tag.keys()))
     child = next(iter(tag.values()))
 
+    html_setter = next(filter(_has_setter, tag.get("attributes", [])), None)
+
+    if html_setter is not None:
+        return "".join(
+            _to_html(
+                {
+                    "script": [
+                        *reject(_has_content, tag[element]),
+                        {CONTENT_TAG: html_setter[HTML_SETTER].get("__html", "")},
+                    ],
+                    "attributes": [
+                        *reject(_has_setter, tag["attributes"]),
+                        dict(reject(_has_setter, html_setter.items())),
+                    ],
+                },
+                parent,
+                rename=element,
+            )
+        )
+
     if _is_content(element):
         return [_escape(str(child), parent)]
+
+    tag_name = rename or element
 
     attributes = reduce(_to_attributes, tag.get("attributes", []), "")
     bool_attributes = reduce(_to_bool_attributes, tag.get("boolean_attributes", []), "")
@@ -74,13 +105,13 @@ def _to_html(tag: Mapping, parent: str = "") -> list:
     matrix = [_to_html(c, element) for c in child]
     flattened: list = reduce(operator.iadd, matrix, [])
 
-    begin = f"{element}{element_attributes}" if element_attributes else element
+    begin = f"{tag_name}{element_attributes}" if element_attributes else tag_name
 
     if flattened:
-        return [f"<{begin}>", *flattened, f"</{element}>"]
+        return [f"<{begin}>", *flattened, f"</{tag_name}>"]
 
-    if _closing_tag(element):
-        return [f"<{begin}>", f"</{element}>"]
+    if _closing_tag(tag_name):
+        return [f"<{begin}>", f"</{tag_name}>"]
 
     extra = _suffix(begin)
 

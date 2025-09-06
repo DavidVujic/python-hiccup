@@ -142,3 +142,27 @@ def test_order_of_items() -> None:
     data = ["h1", "some ", ["span.pys", "<py>"]]
 
     assert render(data) == '<h1>some <span class="pys">&lt;py&gt;</span></h1>'
+
+
+def test_html_entities() -> None:
+    """HTML entities get escaped."""
+    data = ["p", "Go &larr; left or &rarr; right."]
+
+    assert render(data) == "<p>Go &amp;larr; left or &amp;rarr; right.</p>"
+
+
+def test_dangerously_set_inner_html() -> None:
+    """Mimick dangerouslySetInnerHTML behavior."""
+    data = [
+        "div",
+        [
+            "a",
+            {
+                "href": "/location",
+                "dangerouslySetInnerHTML": {"__html": "Location &rarr;"},
+            },
+            "Location",
+        ],
+    ]
+
+    assert render(data) != '<div><a href="/location">Location &amp;rarr;</a></div>'

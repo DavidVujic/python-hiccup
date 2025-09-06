@@ -10,6 +10,7 @@ Item = str | AbstractSet | Mapping | Sequence
 ATTRIBUTES = "attributes"
 BOOLEAN_ATTRIBUTES = "boolean_attributes"
 CHILDREN = "children"
+HTML_SETTER = "dangerouslySetInnerHTML"
 
 CONTENT_TAG = "<::HICCUP_CONTENT::>"
 
