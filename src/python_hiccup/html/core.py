@@ -65,7 +65,7 @@ def _to_html(tag: Mapping, parent: str = "") -> list:
     child = next(iter(tag.values()))
 
     if _is_content(element):
-        return [_escape(str(child), parent)]
+        return child() if callable(child) else [_escape(str(child), parent)]
 
     attributes = reduce(_to_attributes, tag.get("attributes", []), "")
     bool_attributes = reduce(_to_bool_attributes, tag.get("boolean_attributes", []), "")

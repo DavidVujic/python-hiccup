@@ -1,11 +1,11 @@
 """Transform a sequence of tag data into groups."""
 
 from collections import defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from collections.abc import Set as AbstractSet
 from functools import reduce
 
-Item = str | AbstractSet | Mapping | Sequence
+Item = str | AbstractSet | Mapping | Sequence | Callable
 
 ATTRIBUTES = "attributes"
 BOOLEAN_ATTRIBUTES = "boolean_attributes"

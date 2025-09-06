@@ -142,3 +142,10 @@ def test_order_of_items() -> None:
     data = ["h1", "some ", ["span.pys", "<py>"]]
 
     assert render(data) == '<h1>some <span class="pys">&lt;py&gt;</span></h1>'
+
+
+def test_content_as_function() -> None:
+    """Allow defining content as a callable function, as a custom parser."""
+    data = ["div", lambda: "&copy;"]
+
+    assert render(data) == "<div>&copy;</div>"
