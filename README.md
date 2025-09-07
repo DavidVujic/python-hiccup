@@ -106,6 +106,21 @@ The HTML equivalent is:
 <script async src="js/script.js"></script>
 ```
 
+### Adding unescaped content
+This is useful when rendering HTML entities like `&copy;`.
+
+``` python
+from python_hiccup.html import raw
+
+data = ["div", raw("&copy; this should <strong>not</strong> be escaped!")]
+```
+
+The HTML output:
+
+``` html
+<div>&copy; this should <strong>not</strong> be escaped!</div>
+```
+
 ## Resources
 - [PyScript and python-hiccup example](https://pyscript.com/@davidvujic/pyscript-jokes-with-a-hiccup/latest?files=main.py) - PyScript Jokes with a Hiccup
 - [Hiccup](https://github.com/weavejester/hiccup) - the original implementation, for Clojure.
