@@ -2,7 +2,7 @@
 
 import html
 import operator
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import reduce
 
 from python_hiccup.transform import CONTENT_TAG, transform
@@ -60,12 +60,16 @@ def _is_content(element: str) -> bool:
     return element == CONTENT_TAG
 
 
+def _is_raw(content: str | Callable) -> bool:
+    return callable(content) and content.__name__ == "raw_content"
+
+
 def _to_html(tag: Mapping, parent: str = "") -> list:
     element = next(iter(tag.keys()))
     child = next(iter(tag.values()))
 
     if _is_content(element):
-        return [_escape(str(child), parent)]
+        return child() if _is_raw(child) else [_escape(str(child), parent)]
 
     attributes = reduce(_to_attributes, tag.get("attributes", []), "")
     bool_attributes = reduce(_to_bool_attributes, tag.get("boolean_attributes", []), "")
@@ -96,3 +100,12 @@ def render(data: Sequence) -> str:
     transformed_html: list = reduce(operator.iadd, matrix, [])
 
     return "".join(transformed_html)
+
+
+def raw(content: str | float) -> Callable:
+    """Content that should not be escaped when rendering HTML elements."""
+
+    def raw_content() -> str | float:
+        return content
+
+    return raw_content

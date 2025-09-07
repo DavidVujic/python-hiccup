@@ -1,6 +1,6 @@
 """Unit tests for the python_hiccup.html.render function."""
 
-from python_hiccup.html import render
+from python_hiccup.html import raw, render
 
 
 def test_returns_a_string() -> None:
@@ -142,3 +142,11 @@ def test_order_of_items() -> None:
     data = ["h1", "some ", ["span.pys", "<py>"]]
 
     assert render(data) == '<h1>some <span class="pys">&lt;py&gt;</span></h1>'
+
+
+def test_content_as_function() -> None:
+    """Allow defining content as a callable function, as a custom parser."""
+    content = "&copy; this <strong>should</strong> not be escaped!"
+
+    assert render(["div", raw("&copy;")]) == "<div>&copy;</div>"
+    assert render(["div", raw(content)]) == f"<div>{content}</div>"
