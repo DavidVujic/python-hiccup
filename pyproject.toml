@@ -12,7 +12,7 @@ Repository = "https://github.com/DavidVujic/python-hiccup"
 
 [tool.ruff]
 lint.select = ["ALL"]
-lint.ignore = ["COM812", "ISC001", "D203", "D213"]
+lint.ignore = ["COM812", "ISC001", "D203", "D213", "CPY001"]
 
 line-length = 100
 
@@ -25,7 +25,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "mypy>=1.13.0",
-    "pytest>=8.3.4",
-    "ruff>=0.8.3",
+    "pytest>=9.1.1",
+    "ruff>=0.16.3",
+    "ty>=0.0.72",
 ]
