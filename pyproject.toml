@@ -1,6 +1,6 @@
 [project]
 name = "python-hiccup"
-version = "0.4.0"
+version = "0.4.1"
 description = "Python Hiccup is a library for representing HTML using plain Python data structures"
 authors = [{name = "David Vujic"}]
 readme = "README.md"
