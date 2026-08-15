@@ -138,6 +138,12 @@ Running lint:
 uv run ruff check
 ```
 
+Running type checks:
+
+``` shell
+uv run ty check
+```
+
 Running tests:
 
 ``` shell
