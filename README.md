@@ -8,6 +8,8 @@ Python Hiccup is a library for representing HTML using plain Python data structu
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DavidVujic_python-hiccup&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DavidVujic_python-hiccup)
 
+[![Download Stats](https://img.shields.io/pypi/dm/python-hiccup?label=Downloads)](https://pypistats.org/packages/python-hiccup)
+
 ## What is Python Hiccup?
 This is a Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
 Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
@@ -134,6 +136,12 @@ Running lint:
 
 ``` shell
 uv run ruff check
+```
+
+Running type checks:
+
+``` shell
+uv run ty check
 ```
 
 Running tests:

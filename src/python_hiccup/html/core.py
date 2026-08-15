@@ -4,6 +4,7 @@ import html
 import operator
 from collections.abc import Callable, Mapping, Sequence
 from functools import reduce
+from types import FunctionType
 
 from python_hiccup.transform import CONTENT_TAG, transform
 
@@ -61,7 +62,7 @@ def _is_content(element: str) -> bool:
 
 
 def _is_raw(content: str | Callable) -> bool:
-    return callable(content) and content.__name__ == "raw_content"
+    return isinstance(content, FunctionType) and content.__name__ == "raw_content"
 
 
 def _to_html(tag: Mapping, parent: str = "") -> list:
