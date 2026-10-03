@@ -150,3 +150,11 @@ def test_content_as_function() -> None:
 
     assert render(["div", raw("&copy;")]) == "<div>&copy;</div>"
     assert render(["div", raw(content)]) == f"<div>{content}</div>"
+
+
+def test_content_as_xml() -> None:
+    """Allow defining content as a callable function, as a custom parser."""
+    data = ["hej:xml", "some ", ["span.pys", "<py>"]]
+
+    data = ["?xml", {"version": "1.0", "encoding": "UTF-8"}]
+    assert render(data) == '<?xml version="1.0" encoding="UTF-8"?>'
