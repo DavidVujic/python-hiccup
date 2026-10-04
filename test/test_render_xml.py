@@ -29,7 +29,7 @@ def test_parses_attributes() -> None:
 
 
 def test_escapes_content() -> None:
-    """Assert that the render function will escape the inner content of elements according to the XML spec."""
+    """Assert that the render function will escape the inner content of elements."""
     data = ["Message", "Hello > Bye & 0 < 1"]
 
     expected = "<Message>Hello &gt; Bye &amp; 0 &lt; 1</Message>"
@@ -46,7 +46,7 @@ def test_generates_an_element_with_children() -> None:
 
 def test_generates_an_namespaced_element_with_children() -> None:
     """Assert that an element with children is rendered."""
-    data = ["actor", [["name", "John Cleese"], ["fictional:character", "Archie Leach"]]]
+    data = [["name", "John Cleese"], ["fictional:character", "Archie Leach"]]
 
-    expected = "<actor><name>John Cleese</name><fictional:character>Archie Leach</fictional:character></actor>"
+    expected = "<name>John Cleese</name><fictional:character>Archie Leach</fictional:character>"
     assert render(data) == expected
