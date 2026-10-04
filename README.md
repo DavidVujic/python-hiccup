@@ -1,6 +1,6 @@
 # Python Hiccup
 
-Python Hiccup is a library for representing HTML using plain Python data structures.
+Python Hiccup is a library for representing HTML and XML using plain Python data structures.
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/DavidVujic/python-hiccup/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/DavidVujic/python-hiccup/tree/main)
 
@@ -11,16 +11,14 @@ Python Hiccup is a library for representing HTML using plain Python data structu
 [![Download Stats](https://img.shields.io/pypi/dm/python-hiccup?label=Downloads)](https://pypistats.org/packages/python-hiccup)
 
 ## What is Python Hiccup?
-This is a Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML in Python.
-Using `list` or `tuple` to represent HTML elements, and `dict` to represent the element attributes.
-
-_This project started out as a fun coding challenge, and now evolving into something useful for Python Dev teams._
+This is a Python implementation of the Hiccup syntax. Python Hiccup is a library for representing HTML and XML in Python.
+Using `list` or `tuple` to represent HTML or XML elements, and `dict` to represent the element attributes.
 
 ## Usage
 Create server side HTML using plain Python data structures.
 You can also use it with __PyScript__.
 
-## Example
+### Example, creating HTML
 
 Python:
 ``` python
@@ -51,6 +49,17 @@ data = todo(["one", "two", "three"])
 
 render(["ul", data])
 ```
+
+### Example, creating XML
+
+Python:
+``` python
+from python_hiccup.xml import render
+
+render(["Message", "Hello world!"])
+```
+
+The output will be a string: `<Message>Hello world!</Message>`
 
 ## Basic syntax
 
@@ -121,6 +130,34 @@ The HTML output:
 
 ``` html
 <div>&copy; this should <strong>not</strong> be escaped!</div>
+```
+
+### Creating an XML document
+
+``` python
+attributes = {"xmlns:fictional": "http://characters.example.com", "xmlns": "http://people.example.com"}
+
+john = ["actor", [["name", "John Cleese"], ["fictional:character", "Archie Leach"]]]
+eric = ["actor", [["name", "Kevin Kline"], ["fictional:character", "Otto West"]]]
+
+actors = ["actors", attributes, [john, eric]]
+document = [["?xml", {"version": 1.0}], actors]
+```
+
+The rendered output:
+
+``` xml
+<?xml version="1.0"?>
+<actors xmlns:fictional="http://characters.example.com" xmlns="http://people.example.com">
+  <actor>
+    <name>John Cleese</name>
+    <fictional:character>Archie Leach</fictional:character>
+  </actor>
+  <actor>
+    <name>Kevin Kline</name>
+    <fictional:character>Otto West</fictional:character>
+  </actor>
+</actors>
 ```
 
 ## Resources
