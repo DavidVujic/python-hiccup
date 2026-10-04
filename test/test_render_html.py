@@ -18,7 +18,7 @@ def test_accepts_a_sequence_of_tuples() -> None:
 
 
 def test_handles_special_tags() -> None:
-    """Assert that the HTML render function takes any special elements into account when."""
+    """Assert that the HTML render function takes any special elements into account."""
     assert render(["!DOCTYPE"]) == "<!DOCTYPE>"
     assert render(["div"]) == "<div />"
 
