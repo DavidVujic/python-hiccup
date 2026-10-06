@@ -37,6 +37,15 @@ def test_escapes_content() -> None:
     assert render(data) == expected
 
 
+def test_escapes_content_but_not_CDATA() -> None:
+    """Assert that the render function escapes inner content, but not the data in CDATA sections."""
+    data = ["Message", "Hello > Bye & 0 < 1 <![CDATA[ < DATA > & ]]>"]
+
+    expected = "<Message>Hello &gt; Bye &amp; 0 &lt; 1 <![CDATA[ < DATA > & ]]></Message>"
+
+    assert render(data) == expected
+
+
 def test_escapes_content_in_attributes() -> None:
     """Assert that the render function will escape the content of attributes."""
     data = ["Message", {"value": "Hello & <Goodbye>"}]
