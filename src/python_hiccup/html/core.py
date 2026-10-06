@@ -1,14 +1,9 @@
 """Render HTML from a sequence of grouped data."""
 
-import html
 from collections.abc import Sequence
 
+from python_hiccup.html import escape
 from python_hiccup.markup import render as render_markup
-
-
-def escape(data: str) -> str:
-    """HTML content escaping wrapper."""
-    return html.escape(data)
 
 
 def render(data: Sequence) -> str:

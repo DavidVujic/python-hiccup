@@ -2,7 +2,7 @@
 
 import operator
 from collections.abc import Callable, Mapping, Sequence
-from functools import reduce
+from functools import partial, reduce
 from types import FunctionType
 from typing import Protocol
 
@@ -10,14 +10,13 @@ from python_hiccup.transform import CONTENT_TAG, transform
 
 
 class Escape(Protocol):
-    """Method of escaping Content.
+    """Methods of escaping Content."""
 
-    Example, HTML: the html.escape function
-    Example, XML: the xml.sax.saxutils function
-    """
+    def escape_content(self, data: str) -> str:
+        """Signature of the escape content action."""
 
-    def __call__(self, data: str) -> str:
-        """Signature of the callable action."""
+    def escape_attribute(self, data: str) -> str:
+        """Signature of the escape attribute action."""
 
 
 def _element_allows_raw_content(element: str) -> bool:
@@ -35,16 +34,16 @@ def _allow_raw_content(content: str, element: str) -> bool:
     return _is_allowed_raw(content)
 
 
-def _escape(fn: Escape, content: str, element: str) -> str:
-    return content if _allow_raw_content(content, element) else fn(content)
+def _escape(actions: Escape, content: str, element: str) -> str:
+    return content if _allow_raw_content(content, element) else actions.escape_content(content)
 
 
 def _join(acc: str, attrs: Sequence) -> str:
     return " ".join([acc, *attrs])
 
 
-def _to_attributes(acc: str, attributes: Mapping) -> str:
-    attrs = [f'{k}="{v}"' for k, v in attributes.items()]
+def _to_attributes(actions: Escape, acc: str, attributes: Mapping) -> str:
+    attrs = [f'{k}="{actions.escape_attribute(v)}"' for k, v in attributes.items()]
 
     return _join(acc, attrs)
 
@@ -81,18 +80,19 @@ def _is_raw(content: str | Callable) -> bool:
     return isinstance(content, FunctionType) and content.__name__ == "raw_content"
 
 
-def _to_markup(fn: Escape, tag: Mapping, parent: str = "") -> list:
+def _to_markup(actions: Escape, tag: Mapping, parent: str = "") -> list:
     element = next(iter(tag.keys()))
     child = next(iter(tag.values()))
 
     if _is_content(element):
-        return child() if _is_raw(child) else [_escape(fn, str(child), parent)]
+        return child() if _is_raw(child) else [_escape(actions, str(child), parent)]
 
-    attributes = reduce(_to_attributes, tag.get("attributes", []), "")
+    fn = partial(_to_attributes, actions)
+    attributes = reduce(fn, tag.get("attributes", []), "")
     bool_attributes = reduce(_to_bool_attributes, tag.get("boolean_attributes", []), "")
     element_attributes = attributes + bool_attributes
 
-    matrix = [_to_markup(fn, c, element) for c in child]
+    matrix = [_to_markup(actions, c, element) for c in child]
     flattened: list = reduce(operator.iadd, matrix, [])
 
     begin = f"{element}{element_attributes}" if element_attributes else element
@@ -108,11 +108,11 @@ def _to_markup(fn: Escape, tag: Mapping, parent: str = "") -> list:
     return [f"<{begin}{extra}>"]
 
 
-def render(data: Sequence, escape_fn: Escape) -> str:
+def render(data: Sequence, actions: Escape) -> str:
     """Transform a sequence of grouped data to markup."""
     transformed = transform(data)
 
-    matrix = [_to_markup(escape_fn, t) for t in transformed]
+    matrix = [_to_markup(actions, t) for t in transformed]
 
     transformed_markup: list = reduce(operator.iadd, matrix, [])
 
