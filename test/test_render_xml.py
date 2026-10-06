@@ -37,7 +37,7 @@ def test_escapes_content() -> None:
     assert render(data) == expected
 
 
-def test_escapes_content_but_not_CDATA() -> None:
+def test_escapes_content_but_not_cdata() -> None:
     """Assert that the render function escapes inner content, but not the data in CDATA sections."""
     data = ["Message", "Hello > Bye & 0 < 1 <![CDATA[ < DATA > & ]]>"]
 
