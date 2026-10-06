@@ -1,14 +1,9 @@
 """Render HTML from a sequence of grouped data."""
 
 from collections.abc import Sequence
-from xml.sax import saxutils
 
 from python_hiccup.markup import render as render_markup
-
-
-def escape(data: str) -> str:
-    """XML content escaping wrapper."""
-    return saxutils.escape(data)
+from python_hiccup.xml import escape
 
 
 def render(data: Sequence) -> str:

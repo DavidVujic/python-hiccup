@@ -80,6 +80,15 @@ def test_escapes_content() -> None:
     assert render(data) == expected
 
 
+def test_escapes_content_in_attributes() -> None:
+    """Assert that the render function will escape the content of attributes."""
+    data = ["div", {"class": "Hello & <Goodbye>"}]
+
+    expected = '<div class="Hello &amp; &lt;Goodbye&gt;" />'
+
+    assert render(data) == expected
+
+
 def test_does_not_escape_script_content() -> None:
     """Assert that content within a script tag is not escaped.
 

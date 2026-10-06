@@ -37,6 +37,15 @@ def test_escapes_content() -> None:
     assert render(data) == expected
 
 
+def test_escapes_content_in_attributes() -> None:
+    """Assert that the render function will escape the content of attributes."""
+    data = ["Message", {"value": "Hello & <Goodbye>"}]
+
+    expected = '<Message value="Hello &amp; &lt;Goodbye&gt;" />'
+
+    assert render(data) == expected
+
+
 def test_generates_an_element_with_children() -> None:
     """Assert that an element with children is rendered."""
     data = ["data", ["item", "Python"]]
